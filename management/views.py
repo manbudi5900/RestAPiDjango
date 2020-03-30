@@ -12,8 +12,7 @@ from rest_framework.renderers import JSONRenderer
 
 
 class DosenViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                      IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = Dosen.objects.all()
     serializer_class = DosenSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
