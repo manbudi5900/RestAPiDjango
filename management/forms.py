@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
-from .models import Dosen, Matkul
+from .models import Dosen, Matkul,Mahasiswa 
 
 
 class DosenChangeForm(forms.ModelForm):
@@ -45,3 +45,26 @@ class MatkulChangeForm(forms.ModelForm):
     class Meta:
         model = Matkul
         fields = ('kode_matkul', 'nama_matkul', 'nip')
+
+class MahasiswaChangeForm(forms.ModelForm):
+    nim = forms.CharField(widget=forms.PasswordInput, required=False,
+                                validators=[
+                                    RegexValidator(r'^.{9,}$', 'NIM must has at least 9 characters.')])
+
+    def __init__(self, *args, **kwargs):
+        super(GithubChangeForm, self).__init__(*args, **kwargs)
+        self.fields['nim'].required = True
+        self.fields['nama'].required = True
+        self.fields['alamat'].required = True
+
+    def save(self, commit=True):
+        mahasiswa = super(MahasiswaChangeForm, self).save(commit=False)
+
+        if commit:
+            mahasiswa.save()
+        return mahasiswa
+    
+
+    class Meta:
+        model = Mahasiswa
+        fields = ('nim', 'nama', 'alamat')
